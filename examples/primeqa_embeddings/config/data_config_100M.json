@@ -1,0 +1,60 @@
+[
+    {
+        "name": "stackexchange_duplicate_questions_title-body_title-body.jsonl.gz",
+        "lines": 250460,
+        "weight": 21
+    },
+    {
+        "name": "stackexchange_duplicate_questions_body_body.jsonl.gz",
+        "lines": 250519,
+        "weight": 21
+    },
+    {
+        "name": "squad_pairs.jsonl.gz",
+        "lines": 87599,
+        "weight": 22
+    },
+
+    {
+        "name": "NQ-train_pairs.jsonl.gz",
+        "lines": 100231,
+        "weight": 25
+    },
+    {
+        "name": "stackexchange_duplicate_questions_title_title.jsonl.gz",
+        "lines": 304525,
+        "weight": 26
+    },
+
+    {
+        "name": "wikihow.jsonl.gz",
+        "lines": 128542,
+        "weight": 32
+    },
+    {
+        "name": "AllNLI.jsonl.gz",
+        "lines": 277230,
+        "weight": 69
+    },
+
+    {
+        "name": "specter_train_triples.jsonl.gz",
+        "lines": 684100,
+        "weight": 84
+    },
+    {
+        "name": "gooaq_pairs.jsonl.gz",
+        "lines": 3012496,
+        "weight": 247
+    },
+    {
+        "name": "S2ORC_title_abstract.jsonl.gz",
+        "lines": 41769185,
+        "weight": 123
+    },
+    {
+        "name": "S2ORC_citations_abstracts.jsonl.gz",
+        "lines": 52603982,
+        "weight": 123
+    }
+]
