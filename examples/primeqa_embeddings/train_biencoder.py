@@ -35,7 +35,7 @@ class ProcessArguments:
         default='embedding-training-data', metadata={"help": "directory containing the data"}
     )
     data_config_file: str = field(
-        default='./config/data_config_5M.json', metadata={"help": "data config file"}
+        default='/dccstor/bsiyer6/sbert/sentence-transformers/examples/primeqa_embeddings/config/data_config_100M.json', metadata={"help": "data config file"}
     )
     use_data_weights_from_config: bool = field(
         default=False, metadata={"help": "Use data weights from data_config_file"}
@@ -116,7 +116,7 @@ def main():
     ## TODO: weighted mean pooling - idf / colbert max sim ??
     word_embedding_model = models.Transformer(model_name, max_seq_length=max_seq_length)
     pooling_model = models.Pooling(word_embedding_model.get_word_embedding_dimension())
-    model = SentenceTransformer(modules=[word_embedding_model, pooling_model])
+    trainer = SentenceTransformer(modules=[word_embedding_model, pooling_model])
 
     ## Read in the data
     data_dir = args.data_dir
@@ -136,11 +136,11 @@ def main():
     train_objectives = []
     if len(datasets_pairs) > 0:
         train_dataloader_pairs = MultiDatasetDataLoader(datasets_pairs, batch_size_pairs=batch_size_pairs, dataset_size_temp=1, allow_swap=False)
-        train_loss_pairs = losses.MultipleNegativesRankingLoss(model, scale = 20.0, similarity_fct = util.cos_sim)
+        train_loss_pairs = losses.MultipleNegativesRankingLoss(trainer, scale = 20.0, similarity_fct = util.cos_sim)
         train_objectives.append( (train_dataloader_pairs, train_loss_pairs) )
     if len(datasets_triples) > 0:
         train_dataloader_triples = MultiDatasetDataLoader(datasets_triples, batch_size_pairs=batch_size_pairs, batch_size_triplets=batch_size_triplets, dataset_size_temp=1, allow_swap=False)
-        train_loss_triples = losses.TripletLoss(model, distance_metric=losses.TripletDistanceMetric.EUCLIDEAN, triplet_margin=5)
+        train_loss_triples = losses.TripletLoss(trainer, distance_metric=losses.TripletDistanceMetric.EUCLIDEAN, triplet_margin=5)
         train_objectives.append( (train_dataloader_triples, train_loss_triples) )
         
     #Read STSbenchmark dataset and use it as development set
@@ -162,7 +162,7 @@ def main():
 
     # Train the model
     # TODO: migrate to HF style trainer
-    model.fit(train_objectives=train_objectives,
+    trainer.fit(train_objectives=train_objectives,
             evaluator=dev_evaluator,
             epochs=num_epochs,
             evaluation_steps=evaluation_steps,

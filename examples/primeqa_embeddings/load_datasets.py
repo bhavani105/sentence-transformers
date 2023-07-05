@@ -15,27 +15,20 @@ logging.basicConfig(format='%(asctime)s - %(message)s',
                     level=logging.INFO,
                     handlers=[LoggingHandler()])
 
-# def load_nli(nli_dataset_path):
-
-#     label2int = {"contradiction": 0, "entailment": 1, "neutral": 2}
-#     train_nli_samples = []
-#     with gzip.open(nli_dataset_path, 'rt', encoding='utf8') as fIn:
-#         reader = csv.DictReader(fIn, delimiter='\t', quoting=csv.QUOTE_NONE)
-#         for row in reader:
-#             if row['split'] == 'train':
-#                 label_id = label2int[row['label']]
-#                 train_nli_samples.append(InputExample(texts=[row['sentence1'], row['sentence2']], label=label_id))
-#     return train_nli_samples
-
 def load_pairs_triples(filepath, max=None):
     dataset = []
     with gzip.open(filepath, "rt") as fIn:
         for line in tqdm(fIn):
-            texts = json.loads(line)
-            assert(len(texts) == 2 or len(texts) == 3)
-            dataset.append(InputExample(texts=texts, guid=None))
-            if max is not None and len(dataset) == max:
-                break
+            texts = json.loads(line)   
+            if type(texts) is list:
+                assert(len(texts) == 2 or len(texts) == 3)
+                dataset.append(InputExample(texts=texts, guid=None))
+                if max is not None and len(dataset) == max:
+                    break
+            elif 'query' in texts and 'pos' in texts:
+                query = texts['query']
+                for text in texts['pos']:
+                    dataset.append(InputExample(texts=[ query, text], guid=None))
             
     return dataset
 
